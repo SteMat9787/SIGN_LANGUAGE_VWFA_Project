@@ -1,0 +1,10 @@
+%This is the folder with the localizer.
+
+In this folder there are:
+1. signVWFA_localizer.m --> this is the script to run
+2. Stimuli_3D --> A folder with the images for the localizer
+3. output_files --> A folder where the output files generated runninfthe main script will be created 
+
+The output is a folder named:'[subname]_3D_Onsetfiles' including:
+1. a .csv file with the results for all  the runs  (here you find also runs that crashed or that stop before the end)
+2. a .mat fille foreach run
