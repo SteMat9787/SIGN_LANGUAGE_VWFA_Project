@@ -1,2 +1,10 @@
-In this folder there are all the files for the multivariate experiment.
+%This is the folder with all the files for the multivariate experiment
 
+In this folder there are:
+1. SignExp_main_withTarget.m --> this is the script to run
+2. Sign_Stimuli--> A folder with the videosfor the localizer  
+3. output_files --> A folder where the output files generated running the main script will be created 
+
+The output is:
+1. a .csv file with the results for all the runs (here you find also runs that crashed or that stopped before the end)
+2. a .mat file for each run (this is the output for the fMRI analysis)
