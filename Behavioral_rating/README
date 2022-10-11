@@ -1,0 +1,13 @@
+# SIGN-LANGUAGE-EXP_rating
+
+All the material for the VWFA - sign language experiment- behavioral ratings
+
+ RUN PlayVideos_Ver4.m to start the experiment.
+ This script will use the function Create_pairs.m to create all the possible pairs of stimuli.
+ 
+ For each pair, the subject will see the first only the video 1 on the left side of the screen, then ony the video 2 on the right part of the screen.
+ Finally both videos will be presented together. 
+ When the word VISUAL appears under the videos the sub. has to press a number from 1 to 7 (1==the 2 videos are visually very similar; 7==the 2 videos      are visually very different). 
+ When the worhd MEANING will appear under the videos the sub. has to press a number from 1 to 7 (1==the 2 videos are very similar for their meaning;  7==the 2 videos are very different for their meaning).
+ 
+ A folder output_files has to be there in the same folder as the scripts. For each subject a folder with his/her nickname will be created and inside this folder you can find the .csv output file for that subject.
