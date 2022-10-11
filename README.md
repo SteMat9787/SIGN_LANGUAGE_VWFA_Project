@@ -1,6 +1,6 @@
 # signVWFA
 
-# SIGN_LANGUAGE_VWFA_Project
+SIGN_LANGUAGE_VWFA_Project
 
 It includes 3 different parts of the project :
 - fMRI--> localizer (words, bodies, hands and faces);
