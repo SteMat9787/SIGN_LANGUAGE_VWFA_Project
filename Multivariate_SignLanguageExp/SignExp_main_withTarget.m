@@ -79,10 +79,11 @@ commandwindow; %move the cursor to the command window so responses will not prin
 %% SET THE MAIN VARIABLES
 global  GlobalExpID GlobalGroupID GlobalSubjectID GlobalRunNumberID
 
-GlobalExpID=input('Experiment ID (SignExp): ', 's');
+% GlobalExpID=input('Experiment ID (SignExp): ', 's');
+GlobalExpID= 'signVWFA';
 GlobalGroupID= input ('Group (HNS-HES-HLS-DES):','s'); %%HNS: Hearing non signers; HES:Hearing early signers; HLS:Hearing late signers; DES:Deaf early signers
 GlobalSubjectID=input('Subject ID: ', 's'); %% (first 2 letters of Name-first 2 letters of Surname)
-GlobalRunNumberID=input('Run Number(1-4): ', 's');
+GlobalRunNumberID=input('Run Number(1-10): ', 's');
 
 %% TRIGGER
 numTriggers = 1;         % num of excluded volumes (first 2 triggers) [NEEDS TO BE CHECKED]
@@ -527,6 +528,9 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
     
     %Draw THE FIX CROSS
     Screen('DrawLines',wPtr,crossLines,crossWidth,crossColor,[screenCenterX,screenCenterY]);
+    Screen('TextSize', wPtr, 14);%text size
+    %DrawFormattedText(wPtr, '\n [press any key to quit]', 'center','center',[255 255 255]);
+    DrawFormattedText(wPtr, '\n [press any key to quit]', [],[],[255 255 255]);
     % Flip the screen
     Screen('Flip', wPtr); 
     
