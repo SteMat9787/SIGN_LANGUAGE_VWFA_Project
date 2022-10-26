@@ -61,11 +61,12 @@ tic
 
 %Which output:
 %The script will generate a folder named 'output_files'.
-%For each participant there will be 2 output files:
+%For each participant there will be 3 output files:
 % 1. Results.mat file for each run (e.g. 'StMa_Onsetfile_1.mat' for the subject StMa RUN 1)
-% including the Duration, Name, Onset, Resp for Target and Non-Target Stimuli.
-% 2. A .csv file in which all the variables aboved are saved.
-% N.B. The .csv file will be saved also in the case the exp. is stopped
+% including the Onset, Duration, Name, Resp for Target and Non-Target Stimuli.
+% 2. A .csv file for  each in which all the variables aboved are saved.
+% 3. a .tsv file for  each in which all the variables aboved are saved (this compatible with BIDS analyses).
+% N.B. The .csv  file will be saved also in the case the exp. is stopped
 % before the end (e.g. forced to stop, the script crash etc.), while the
 % mat file will be stored only if the experiment arrives till the end.
 
