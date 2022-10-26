@@ -54,14 +54,15 @@ clc;
 Screen('Preference', 'SkipSyncTests', 1);
 
 %% Device
-Cfg.device = 'Scanner'; %(Change manually: 'PC' or 'Scanner')
+Cfg.device = 'PC'; %(Change manually: 'PC' or 'Scanner')
 
 fprintf('Connected Device is %s \n\n',Cfg.device);
 
 
 %% SET THE MAIN VARIABLES
-global  GlobalGroupID GlobalSubjectID GlobalRunNumberID GlobalStimuliID
+global GlobalExpID GlobalGroupID GlobalSubjectID GlobalRunNumberID GlobalStimuliID
 
+GlobalExpID= 'loc';
 GlobalGroupID= input ('Group (HNS-HES-HLS-DES):','s'); %%HNS: Hearing non signers; HES:Hearing early signers; HLS:Hearing late signers; DES:Deaf early signers
 GlobalSubjectID=input('Subject ID: ', 's'); %% (first 2 letters of Name-first 2 letters of Surname)
 GlobalRunNumberID=input('Run Number(1-4): ', 's');
@@ -88,11 +89,14 @@ output_directory='output_files';
     if ~exist(output_directory, 'dir')
        mkdir(output_directory)
     end
-output_file_name=[output_directory '/output_file_' GlobalGroupID '_' GlobalSubjectID '_' GlobalStimuliID '.csv'];
+output_file_name= strcat(output_directory,'/sub-', GlobalSubjectID, '_ses-',GlobalRunNumberID, '_task-', GlobalExpID, '.csv');
+output_file_name_tab= strcat(output_directory,'/sub-', GlobalSubjectID, '_ses-',GlobalRunNumberID, '_task-', GlobalExpID, '.tsv'); %will be usedd for tsv converted output file
 
 logfile=fopen(output_file_name,'a');%'a'== PERMISSION: open or create file for writing; append data to end of file
 fprintf(logfile,'\n');
-fprintf(logfile,'groupID,subjectID,StimStyle,RunNum,Block_num,trial_num,Image_Name,Image_duration,Stimulus_onset,Time_Loop,Response_key,Target\n');
+%new
+fprintf(logfile,'onset,duration,trial_type,stim_name,Block_num, trial_num, time_loop,Target,Response_key,group\n');
+            
 
 
 %% SET THE STIMULI/CATEGORY
@@ -116,7 +120,7 @@ TAR=0; %%i will use it to print target/non target stimuli
 [wPtr, rect]= Screen(('OpenWindow'),max(Screen('Screens'))); %open the screen
 Screen('FillRect',wPtr,[0 0 0]); %draw a black rectangle (big as all the monitor) on the back buffer
 Screen ('Flip',wPtr); %flip the buffer, showing the rectangle
-HideCursor(wPtr);
+%HideCursor(wPtr);
 
 % STIMULI SETTING
 stimSize=400;
@@ -258,8 +262,18 @@ try  % safety loop: close the screen if code crashes
             
             loop_end=GetSecs();
             
-            fprintf (logfile, '%s,%s,%s,%s, #%d, #%d,%s,%.2f,%.2f s,%.2f s,%s,%d \n',GlobalGroupID,GlobalSubjectID,GlobalStimuliID,GlobalRunNumberID,b,n,Stimuli{n},stimTime, time_stim-LoopStart,(cross_time+timeout)-Start, responseKey,TAR);
+             trial_type=Stimuli{n}(1);
+                
+                %%add n/a in the repo col when there is no response
+                if responseKey
+                    %do nothing
+                else
+                    responseKey='n/a';
+                end
             
+            fprintf (logfile, '%d,%d,%s,%s,%d,%d,%d,%d,%s,%s \n' ,time_stim-LoopStart,stimTime,trial_type,Stimuli{n},b,n,(cross_time+timeout)-Start,TAR,responseKey,GlobalGroupID);
+
+           
             while GetSecs()-trial_start<trial_duration
                 % do nothing
             end
@@ -309,8 +323,19 @@ try  % safety loop: close the screen if code crashes
 
                 loop_end=GetSecs();
                 
-                fprintf (logfile, '%s,%s,%s,%s,#%d, #%d,%s,%.2f,%.2f s,%.2f s,%s,%d\n',GlobalGroupID,GlobalSubjectID,GlobalStimuliID,GlobalRunNumberID,b,n,Stimuli{n},stimTime, time_stim-LoopStart,(cross_time+timeout)-Start, responseKey,TAR);
+               
                 
+                trial_type='target';
+                
+                %%add n/a in the repo col when there is no response
+                if responseKey
+                    %do nothing
+                else
+                    responseKey='n/a';
+                end
+                
+                fprintf (logfile, '%d,%d,%s,%s,%d,%d,%d,%d,%s,%s \n' ,time_stim-LoopStart,stimTime,trial_type,Stimuli{n},b,n,(cross_time+timeout)-Start,TAR,responseKey,GlobalGroupID);
+
                 while GetSecs()-trial_start<trial_duration
                     % do nothing
                 end
@@ -344,10 +369,17 @@ try  % safety loop: close the screen if code crashes
     end%for b(lock)
     
     LoopEnd=GetSecs();
-    fprintf (logfile, 'The time for the run took %.2f min\n', ((LoopEnd-LoopStart)/60));
-    Screen(wPtr,'Close');
-    sca;
     
+    disp (strcat( 'The time for the run took min:', num2str ((LoopEnd-LoopStart)/60)));
+    %wait for any key pressed to close the screen
+    disp 'Press any key to quit';
+    KbWait(-1);
+    
+    %create a .tsv file with tab delimiter (better for BIDS analyses)
+    table= readtable(output_file_name);
+    
+    tsvwrite(output_file_name_tab,table)
+    %save the variables in the .mat files
     
 catch
     clear Screen;
@@ -357,7 +389,11 @@ catch
     end
     error(lasterror)
 end
-WaitSecs(1)%wait 1 sec before to finish
+% WaitSecs(1)%wait 1 sec before to finish
+
+% clear the screen
+    Screen(wPtr,'Close');
+    sca;
 
 cd('output_files')
 save(strcat (GlobalSubjectID,'_',GlobalStimuliID,'_Onsetfile_',GlobalRunNumberID,'.mat'),'Onset','Name','Duration','Resp','Onset_target','Name_target','Duration_target','Resp_target');
