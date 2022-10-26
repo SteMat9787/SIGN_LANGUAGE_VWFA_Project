@@ -95,11 +95,15 @@ output_directory='output_files';
 if ~exist(output_directory, 'dir')
     mkdir(output_directory)
 end
-output_file_name=[output_directory '/output_file_' GlobalExpID '_' GlobalGroupID '_' GlobalSubjectID '.csv'];
+
+output_file_name= strcat(output_directory,'/sub-', GlobalSubjectID, '_ses-',GlobalRunNumberID, '_task-', GlobalExpID, '.csv');
+output_file_name_tab= strcat(output_directory,'/sub-', GlobalSubjectID, '_ses-',GlobalRunNumberID, '_task-', GlobalExpID, '.tsv');
 
 logfile=fopen(output_file_name,'a');%'a'== PERMISSION: open or create file for writing; append data to end of file
 fprintf(logfile,'\n');
-fprintf(logfile,'groupID,subjectID,RunNum,trial_num,Image_Name,Image_duration,Stimulus_onset,Time_Loop,Target,Same_Target,Response_key\n');
+
+fprintf(logfile,'onset,duration,trial_type,stim_name, time_loop,Target,Same_Target,Response_key,group\n');
+     
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -180,6 +184,7 @@ Baseline_end=10;
 % FIX CROSS
 crossLength=50;
 crossColor=[200 200 200];
+crossColorEnd=[150 150 150]; 
 crossWidth=7;
 %Set start and end point of lines
 crossLines=[-crossLength, 0; crossLength, 0; 0, -crossLength; 0, crossLength];
@@ -253,7 +258,7 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
     LoopStart=GetSecs();
     WaitSecs(Baseline_start);
     %% Start the loop for each video
-    for iStim=1:length(All_stim_shuffle)
+    for iStim=1:3%length(All_stim_shuffle)
         
         Screen('FillRect',wPtr,[0 0 0]); %draw a rectangle (big as all the monitor) on the back buffer
         Screen ('Flip',wPtr); %flip the buffer, showing the rectangle
@@ -359,11 +364,23 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
         Name(iStim) = All_stim_shuffle(iStim);
         Resp(iStim) = {responseKey};
         Onset(iStim)=  Start_time-LoopStart;
-%         Duration(iStim)= Video_end_time-Start_time;
+        
+        if Name{1,iStim}(1)=='N'
+            trial_type='no_sign';
+        else
+            trial_type='sign';
+        end
+        
+        if Resp{iStim}
+            %do nothing
+        else
+            Resp{iStim}='n/a';
+        end
+        %         Duration(iStim)= Video_end_time-Start_time;
         %print the variable in the .csv file
-        fprintf(logfile,'%s,%s,%d,%d,%s,%d,%d,%d,%d,%d,%s\n', GlobalGroupID,GlobalSubjectID,str2double(GlobalRunNumberID),iStim,All_stim_shuffle{iStim},Duration(iStim),Onset(iStim),End_time-Start_time,TAR,Same_target,Resp{iStim});
-        
-        
+        %fprintf(logfile,'%s,%s,%d,%d,%s,%d,%d,%d,%d,%d,%s\n', GlobalGroupID,GlobalSubjectID,str2double(GlobalRunNumberID),iStim,All_stim_shuffle{iStim},Duration(iStim),Onset(iStim),End_time-Start_time,TAR,Same_target,Resp{iStim});
+      fprintf(logfile,'%d,%d,%s,%s,%d,%d,%d,%s,%s\n', Onset(iStim),Duration(iStim),trial_type,All_stim_shuffle{iStim},End_time-Start_time,TAR,Same_target,Resp{iStim},GlobalGroupID); 
+       
         %% if this is a target repeat the same stimulus but with the opposite gender
         if find(ismember(Target, Stim_name))
             TAR=1; %this is a target (we'll print this in the .csv and .mat output)
@@ -507,18 +524,36 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
             Name_target(iStim) = {Stim_name_target};
             Resp_target(iStim) = {responseKey};
             Onset_target(iStim)=  Start_time-LoopStart;
+            
+            trial_type='target';
+            
+            %%add n/a in the repo col when there is no response
+            if Resp{iStim}
+                %do nothing
+            else
+                Resp{iStim}='n/a';
+            end
+        %    
 %             Duration_target(iStim)= Video_end_time-Start_time;
             %print the variable in the .csv file
-           % fprintf(logfile,'%s,%s,%d,%d,%s,%d,%d,%d,%d,%d,%s\n', GlobalGroupID,GlobalSubjectID,str2double(GlobalRunNumberID),iStim,All_stim_shuffle{iStim},Duration_target(iStim),Onset_target(iStim),End_time-Start_time,TAR,Same_target,Resp_target{iStim});
-             fprintf(logfile,'%s,%s,%d,%d,%s,%d,%d,%d,%d,%d,%s\n', GlobalGroupID,GlobalSubjectID,str2double(GlobalRunNumberID),iStim,Stim_name_target,Duration_target(iStim),Onset_target(iStim),End_time-Start_time,TAR,Same_target,Resp_target{iStim});
-           
+           fprintf(logfile,'%d,%d,%s,%s,%d,%d,%d,%s,%s\n', Onset_target(iStim),Duration_target(iStim),trial_type,Stim_name_target,End_time-Start_time,TAR,Same_target,Resp_target{iStim},GlobalGroupID);     
+
         end % if target
     end%for iStim
     
-    %save the variables in the .mat files
     WaitSecs(Baseline_end);
     LoopEnd=GetSecs();
-    fprintf (logfile, 'The time for the run took %.2f min\n', ((LoopEnd-LoopStart)/60));
+    disp (strcat( 'The time for the run took min:', num2str ((LoopEnd-LoopStart)/60)));
+    %wait for any key pressed to close the screen
+    disp 'Press any key to quit';
+    KbWait(-1);
+    
+    %create a .tsv file with tab delimiter (better for BIDS analyses)
+    table= readtable(output_file_name);
+    
+    tsvwrite(output_file_name_tab,table)
+    %save the variables in the .mat files
+   
     cd('output_files')
     save(strcat (GlobalSubjectID,'_Onsetfile_',GlobalRunNumberID,'.mat'),'Onset','Name','Duration','Resp','Onset_target','Name_target','Duration_target','Resp_target');
     
@@ -526,16 +561,12 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
     %%%%%acquisitions the subject  will se the fix cross and not the matlab
     %%%%%screen.
     
-    %Draw THE FIX CROSS
-    Screen('DrawLines',wPtr,crossLines,crossWidth,crossColor,[screenCenterX,screenCenterY]);
-    Screen('TextSize', wPtr, 14);%text size
-    %DrawFormattedText(wPtr, '\n [press any key to quit]', 'center','center',[255 255 255]);
-    DrawFormattedText(wPtr, '\n [press any key to quit]', [],[],[255 255 255]);
-    % Flip the screen
-    Screen('Flip', wPtr); 
-    
-    %wait for any key pressed to close the screen
-    KbWait();
+%     %Draw THE FIX CROSS
+%     Screen('DrawLines',wPtr,crossLines,crossWidth,crossColorEnd,[screenCenterX,screenCenterY]);
+%     %Screen('TextSize', wPtr, 14);%text size
+%     %DrawFormattedText(wPtr, '\n [press any key to quit]', [],[],[255 255 255]); 
+%     Screen('Flip', wPtr); 
+
     
 catch ME %the 'try and chatch me' part is added to close the screen in case of an error so that you can see the command window and not get stucked with the blank screen)
     Screen('CloseAll');
@@ -548,3 +579,4 @@ clear Screen;
 sca;
 
 toc
+
