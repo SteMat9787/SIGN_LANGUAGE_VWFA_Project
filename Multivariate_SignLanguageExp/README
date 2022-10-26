@@ -2,8 +2,9 @@
 
 In this folder there are:
 1. SignExp_main_withTarget.m --> this is the script to run
-2. Sign_Stimuli--> A folder with the videosfor the localizer  
-3. output_files --> A folder where the output files generated running the main script will be created 
+2. tsvwrite.m --> function usedd by the main script to cocnvert the .csv output to a .tsv file
+3. Sign_Stimuli--> A folder with the videosfor the localizer  
+4. output_files --> A folder where the output files generated running the main script will be created 
 
 The output is:
 1. a .csv file with the results for each run (here you find also runs that crashed or that stopped before the end)
