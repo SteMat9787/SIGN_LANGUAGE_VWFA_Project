@@ -7,16 +7,16 @@ tic
 %%BLOCK DESCRIPTION
 % In each block all the 12 stimuli from a category are presented in random
 % order. 500 msec for each image + 500 msec ISI (=central fixation cross).
-% In each block there are either 1 or 2 (this is randomly decided) target
+% In each block there are either 0, 1 or 2 (this is randomly decided) target
 % stimuli: a target is the repetition of the previous stimulus. The
 % participant has to press when he/she sees a target.
-% Each block has a duration of 13 or 14 s (depending if 1 or 2 targets).
+% Each block has a duration of 12, 13 or 14 s (depending if 0, 1 or 2 targets).
 
 %PAUSES
 %At the start of the experiment there is a pause of 13s, in which the participant has to fixate
 %the fixation cross in the middle of the screen. There is also an 8s pause
-%every 4 blocks (the repetition of the 4 categories) and at the end of  the
-% experiment. In betweenthe others  block there is 1s IBI.
+%every 4 blocks (the repetition of the 4 categories) and at the end of the
+% experiment. In betweenthe others block there is 1s IBI.
 
 %TASK
 % N-back task: participants has to presss when they see a stimulus identical
@@ -45,8 +45,8 @@ tic
 %Once you will Run the script you will be asked to select some variables:
 %1. Group (HNS-HES-HLS-DES): %%HNS: Hearing non signers; HES:Hearing early
 %signers; HLS:Hearing late signers; DES:Deaf early signers.
-%2. SubID : first 2 letters of Name + first 2 letters of Surname (e.g. Stefania Mattioni == StMa).
-%3. Run Number.
+%2. SubID : a number with 3 digit (e.g. 001).
+%3. Run Number (2 digit: e.g. 01).
 
 
 clear all;
