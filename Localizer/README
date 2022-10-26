@@ -2,10 +2,12 @@
 
 In this folder there are:
 1. signVWFA_localizer.m --> this is the script to run
-2. Stimuli_3D --> A folder with the images for the localizer  (In this folder there is also a plot_stimuli.m script to  visualize the stimuli)
-3. output_files --> A folder where the output files generated runninfthe main script will be created 
+2. tsvwrite.m --> function to convert the .csv output to a .tsv file BIDS compatible
+3. Stimuli_3D --> A folder with the images for the localizer  (In this folder there is also a plot_stimuli.m script to  visualize the stimuli)
+4. output_files --> A folder where the output files generated runninfthe main script will be created 
 
 The output is a folder named:'[subname]_3D_Onsetfiles' including:
-1. a .csv file with the results for all  the runs  (here you find also runs that crashed or that stop before the end)
-2. a .mat file for each run (this is the output for the fMRI analysis)
+1. a .csv file with the results for each run (here you find also runs that crashed or that stop before the end)
+2. a .tsv file for BIDS analyses for each run
+3. a .mat file for each run (this is the output for the fMRI analysis)
 
