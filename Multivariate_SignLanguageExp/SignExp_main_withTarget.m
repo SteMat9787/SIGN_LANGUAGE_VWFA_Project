@@ -5,11 +5,11 @@ tic
 
 % It presents the ensamble of videos of signs in an event-related fashion
 
-% The scripts works without any  externalfunction
+% The scripts works with one external function (tsvwrite) that convert the csv output to a tsv file (for BIDS analyses)
 
 %What is needed to run the script (inputs):
 % 1. a folder named Sign_Stimuli containing all the videos in .mp4 format
-
+% 2. tsvwrite.m function 
 
 %What has to be defined to run the script
 % 1. The stimuli path
@@ -28,7 +28,7 @@ tic
 % There are also 9 meaningless stimuli: videos of signs that do not have
 % any meaning in the sign language.
 %For each stimulus there are 2 version, 1 from an actress and 1 from
-%an actor)
+%an actor
 
 
 %Task
