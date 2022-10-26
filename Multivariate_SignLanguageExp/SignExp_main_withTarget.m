@@ -259,7 +259,7 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
     LoopStart=GetSecs();
     WaitSecs(Baseline_start);
     %% Start the loop for each video
-    for iStim=1:3%length(All_stim_shuffle)
+    for iStim=1:length(All_stim_shuffle)
         
         Screen('FillRect',wPtr,[0 0 0]); %draw a rectangle (big as all the monitor) on the back buffer
         Screen ('Flip',wPtr); %flip the buffer, showing the rectangle
