@@ -1,8 +1,8 @@
 tic
 %%%%%VWFA EXPERIMENT: localizer %%%%%%%
 % Categories of stimuli = 4 (words, bodies, hands and faces); 12 exemplars per category.
-% Tot num stimuli = 48; 
-% There are 20 blocks in a run.
+% Tot num stimuli = 48;
+% There are 16 blocks in a run.
 
 %%BLOCK DESCRIPTION
 % In each block all the 12 stimuli from a category are presented in random
@@ -28,7 +28,7 @@ tic
 % block duration = 1 category in each block + 0/1/2 targets = 12s/13s/14s
 % 16 blocks per run: minimum 192s / maximum 224s (according to 0, 1 or 2
 % targets)
-% 1 pauses of 13s at the beginning of each run 
+% 1 pauses of 13s at the beginning of each run
 % 4 pauses of 8s in each run (after block  4,8,12 amd 16) = 32s
 % a 1s pause between blocks (except for block 4, 8 and 12) = 12s
 % MINIMUM DURATION = 249s (4.15 min) / MAXIMUM DURATION = 281s (4.68 min)
@@ -72,7 +72,7 @@ GlobalStimuliID= '3D'; %input('Stimuli style (line - 3D):','s'); % specify if yo
 % fprintf('Localizer Experiment: line drawing stimuli \n\n');
 % elseif strcmp(GlobalStimuliID,'3D')
 % fprintf('Localizer Experiment: 3D volumetric stimuli \n\n');
-% else 
+% else
 % %if the input is empty take automatically line drawing
 % GlobalStimuliID='3D';
 % fprintf('Localizer Experiment: line drawing stimuli \n\n');
@@ -86,9 +86,9 @@ Cfg.triggerKey = 's';        % the keycode for the trigger
 
 %if it doesn't exist already, make the output folder
 output_directory='output_files';
-    if ~exist(output_directory, 'dir')
-       mkdir(output_directory)
-    end
+if ~exist(output_directory, 'dir')
+    mkdir(output_directory)
+end
 output_file_name= strcat(output_directory,'/sub-', GlobalSubjectID, '_ses-',GlobalRunNumberID, '_task-', GlobalExpID, '.csv');
 output_file_name_tab= strcat(output_directory,'/sub-', GlobalSubjectID, '_ses-',GlobalRunNumberID, '_task-', GlobalExpID, '.tsv'); %will be usedd for tsv converted output file
 
@@ -96,7 +96,7 @@ logfile=fopen(output_file_name,'a');%'a'== PERMISSION: open or create file for w
 fprintf(logfile,'\n');
 %new
 fprintf(logfile,'onset,duration,trial_type,stim_name,Block_num, trial_num, time_loop,Target,Response_key,group\n');
-            
+
 
 
 %% SET THE STIMULI/CATEGORY
@@ -107,7 +107,7 @@ CAT_H={'H1','H2','H3','H4','H5','H6','H7','H8','H9','H10','H11','H12'}; %hands
 %Set the block order
 All_cat={'W','F','B','H'};
 All_cat_rep=[Shuffle(All_cat),Shuffle(All_cat),Shuffle(All_cat),Shuffle(All_cat)];
-N_block=[1:length(All_cat_rep)]; 
+N_block=[1:length(All_cat_rep)];
 
 Block_order=All_cat_rep;
 
@@ -137,7 +137,7 @@ screenCenterY = screenHeight/2;
 stimulusRect=[screenCenterX-stimSize/2 screenCenterY-stimSize/2 screenCenterX+stimSize/2 screenCenterY+stimSize/2];
 
 % STIMULI FOLDER
-stimFolder = 'Stimuli_3D'; 
+stimFolder = 'Stimuli_3D';
 
 t='.jpeg';
 
@@ -165,6 +165,7 @@ try  % safety loop: close the screen if code crashes
     DrawFormattedText(wPtr, '\n READY TO START', 'center','center',[255 255 255]);
     Screen('Flip', wPtr);
     
+    disp('Wait for trigger...');
     
     %%%
     triggerCounter=0;
@@ -185,6 +186,8 @@ try  % safety loop: close the screen if code crashes
             
         end
     end
+    
+    disp('Triggeer ok: experiment starting!');
     
     %Draw THE FIX CROSS
     Screen('DrawLines',wPtr,crossLines,crossWidth,crossColor,[screenCenterX,screenCenterY]);
@@ -218,7 +221,7 @@ try  % safety loop: close the screen if code crashes
         [~,idx]=sort(rand(1,nStim)); %sort randomly the stimuli in the block
         posT=sort((idx(1:nT))); %select the position of the target(s)
         
-        %Get if this is a motion task
+        disp (strcat('Block',num2str(b),'_STARTING'));
         for n = 1:length(Stimuli)%% num of stimuli in each block
             Start=GetSecs();
             keyIsDown=0;
@@ -231,49 +234,49 @@ try  % safety loop: close the screen if code crashes
             imageDisplay = Screen('MakeTexture',wPtr, img);
             
             
-                
             
-                Screen('DrawTexture', wPtr, imageDisplay, [], stimulusRect);
-                % FLIP SCREEN TO SHOW THE STIMULUS(after the cue has been on screen for the ISI)
-                time_stim=Screen('Flip', wPtr);
-                
-            while (GetSecs-time_stim)<=(stimTime) 
-           
-            [keyIsDown, secs, keyCode] = KbCheck(-1);
-            if keyIsDown && min(~strcmp(KbName(keyCode),Cfg.triggerKey))
-                responseKey = KbName(find(keyCode));
-            end
-         end
-
             
-                %Draw THE FIX CROSS
-%                 Screen('DrawLines',wPtr,crossLines,crossWidth,crossColor,[screenCenterX,screenCenterY]);
-%                 % Flip the screen
-                cross_time= Screen('Flip', wPtr,time_stim+stimTime);
-%                  responseKey = []; 
-                while (GetSecs-(cross_time))<=(timeout)
-                    % register the keypress
-                    [keyIsDown, secs, keyCode] = KbCheck(-1);
-                    if keyIsDown && min(~strcmp(KbName(keyCode),Cfg.triggerKey))
-                        responseKey = KbName(find(keyCode));
-                    end
+            Screen('DrawTexture', wPtr, imageDisplay, [], stimulusRect);
+            % FLIP SCREEN TO SHOW THE STIMULUS(after the cue has been on screen for the ISI)
+            time_stim=Screen('Flip', wPtr);
+            
+            while (GetSecs-time_stim)<=(stimTime)
+                
+                [keyIsDown, secs, keyCode] = KbCheck(-1);
+                if keyIsDown && min(~strcmp(KbName(keyCode),Cfg.triggerKey))
+                    responseKey = KbName(find(keyCode));
                 end
-
+            end
+            
+            
+            %Draw THE FIX CROSS
+            %                 Screen('DrawLines',wPtr,crossLines,crossWidth,crossColor,[screenCenterX,screenCenterY]);
+            %                 % Flip the screen
+            cross_time= Screen('Flip', wPtr,time_stim+stimTime);
+            %                  responseKey = [];
+            while (GetSecs-(cross_time))<=(timeout)
+                % register the keypress
+                [keyIsDown, secs, keyCode] = KbCheck(-1);
+                if keyIsDown && min(~strcmp(KbName(keyCode),Cfg.triggerKey))
+                    responseKey = KbName(find(keyCode));
+                end
+            end
+            
             
             loop_end=GetSecs();
             
-             trial_type=Stimuli{n}(1);
-                
-                %%add n/a in the repo col when there is no response
-                if responseKey
-                    %do nothing
-                else
-                    responseKey='n/a';
-                end
+            trial_type=Stimuli{n}(1);
+            
+            %%add n/a in the repo col when there is no response
+            if responseKey
+                %do nothing
+            else
+                responseKey='n/a';
+            end
             
             fprintf (logfile, '%d,%d,%s,%s,%d,%d,%d,%d,%s,%s \n' ,time_stim-LoopStart,stimTime,trial_type,Stimuli{n},b,n,(cross_time+timeout)-Start,TAR,responseKey,GlobalGroupID);
-
-           
+            
+            
             while GetSecs()-trial_start<trial_duration
                 % do nothing
             end
@@ -293,37 +296,37 @@ try  % safety loop: close the screen if code crashes
                 %DRAW THE STIMULUS
                 imageDisplay = Screen('MakeTexture',wPtr, img);
                 
-
-                    Screen('DrawTexture', wPtr, imageDisplay, [], stimulusRect);
-                    % FLIP SCREEN TO SHOW THE STIMULUS(after the cue has been on screen for the ISI)
-                    time_stim=Screen('Flip', wPtr);
-         while (GetSecs-time_stim)<=(stimTime) 
-           
-            [keyIsDown, secs, keyCode] = KbCheck(-1);
-            if keyIsDown && min(~strcmp(KbName(keyCode),Cfg.triggerKey))
-                responseKey = KbName(find(keyCode));
-            end
-         end
-                    %responseKey = [];
-                    %Draw THE FIX CROSS
-%                     Screen('DrawLines',wPtr,crossLines,crossWidth,crossColor,[screenCenterX,screenCenterY]);
-%                     % Flip the screen
-                     cross_time= Screen('Flip', wPtr,time_stim+stimTime);
-                    
-                    while (GetSecs-(cross_time))<=(timeout)
-                        
-                        [keyIsDown, secs, keyCode] = KbCheck(-1);
-                        if keyIsDown && min(~strcmp(KbName(keyCode),Cfg.triggerKey))
-                            responseKey = KbName(find(keyCode));
-                        end
-
-                    end
-
                 
-
+                Screen('DrawTexture', wPtr, imageDisplay, [], stimulusRect);
+                % FLIP SCREEN TO SHOW THE STIMULUS(after the cue has been on screen for the ISI)
+                time_stim=Screen('Flip', wPtr);
+                while (GetSecs-time_stim)<=(stimTime)
+                    
+                    [keyIsDown, secs, keyCode] = KbCheck(-1);
+                    if keyIsDown && min(~strcmp(KbName(keyCode),Cfg.triggerKey))
+                        responseKey = KbName(find(keyCode));
+                    end
+                end
+                %responseKey = [];
+                %Draw THE FIX CROSS
+                %                     Screen('DrawLines',wPtr,crossLines,crossWidth,crossColor,[screenCenterX,screenCenterY]);
+                %                     % Flip the screen
+                cross_time= Screen('Flip', wPtr,time_stim+stimTime);
+                
+                while (GetSecs-(cross_time))<=(timeout)
+                    
+                    [keyIsDown, secs, keyCode] = KbCheck(-1);
+                    if keyIsDown && min(~strcmp(KbName(keyCode),Cfg.triggerKey))
+                        responseKey = KbName(find(keyCode));
+                    end
+                    
+                end
+                
+                
+                
                 loop_end=GetSecs();
                 
-               
+                
                 
                 trial_type='target';
                 
@@ -335,7 +338,7 @@ try  % safety loop: close the screen if code crashes
                 end
                 
                 fprintf (logfile, '%d,%d,%s,%s,%d,%d,%d,%d,%s,%s \n' ,time_stim-LoopStart,stimTime,trial_type,Stimuli{n},b,n,(cross_time+timeout)-Start,TAR,responseKey,GlobalGroupID);
-
+                
                 while GetSecs()-trial_start<trial_duration
                     % do nothing
                 end
@@ -347,7 +350,7 @@ try  % safety loop: close the screen if code crashes
                 Resp_target(b,n) = {responseKey};
                 Onset_target(b,n)= time_stim-LoopStart;
                 Duration_target(b,n)= stimTime;
-            
+                
                 responseKey = [];
             end %if this is a target
             responseKey = [];
@@ -356,15 +359,15 @@ try  % safety loop: close the screen if code crashes
         block_duration=block_end-block_start;
         disp (strcat('Block duration:',num2str(block_duration)));
         
-                            %Draw THE FIX CROSS
-                    Screen('DrawLines',wPtr,crossLines,crossWidth,crossColor,[screenCenterX,screenCenterY]);
-                    % Flip the screen
-                    cross_time= Screen('Flip', wPtr);
-                    
+        %Draw THE FIX CROSS
+        Screen('DrawLines',wPtr,crossLines,crossWidth,crossColor,[screenCenterX,screenCenterY]);
+        % Flip the screen
+        cross_time= Screen('Flip', wPtr);
+        
         if rem(b,length(All_cat))==0
             WaitSecs(8);%if we are in the block 4-8-12-16 wait 8 sec before to finish the block
-        else 
-           WaitSecs(1); 
+        else
+            WaitSecs(1);
         end
     end%for b(lock)
     
@@ -392,8 +395,8 @@ end
 % WaitSecs(1)%wait 1 sec before to finish
 
 % clear the screen
-    Screen(wPtr,'Close');
-    sca;
+Screen(wPtr,'Close');
+sca;
 
 cd('output_files')
 save(strcat (GlobalSubjectID,'_',GlobalStimuliID,'_Onsetfile_',GlobalRunNumberID,'.mat'),'Onset','Name','Duration','Resp','Onset_target','Name_target','Duration_target','Resp_target');
