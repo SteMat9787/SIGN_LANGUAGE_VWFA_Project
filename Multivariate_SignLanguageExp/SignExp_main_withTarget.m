@@ -229,6 +229,7 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
     DrawFormattedText(wPtr, '\n READY TO START', 'center','center',[255 255 255]);
     Screen('Flip', wPtr);
     
+    disp ('Wait for trigger...');
     
     %%%
     triggerCounter=0;
@@ -255,10 +256,23 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
     % Flip the screen
     Screen('Flip', wPtr);
     
+    disp 'Trigger ok: experiment starting!'; %print this on command window
+    
+    %%Message to print on command window
+    if str2num(GlobalRunNumberID)==1
+        disp 'Coucou Alice. You just started the first run: COURAGE!';
+    elseif str2num(GlobalRunNumberID)==6
+        disp 'You are doing great Alice: at the end of this run you are halfway.';
+    elseif str2num(GlobalRunNumberID)==10
+        disp '10 runs already: BRAVO Alice! Almost done!';
+    elseif str2num(GlobalRunNumberID)==12
+        disp 'Super, Alice! This might be the last run....unless you are still plenty of time, in that case GO ON';
+    end
     
     LoopStart=GetSecs();
     WaitSecs(Baseline_start);
     %% Start the loop for each video
+    stim2disp=(0:9:length(All_stim_shuffle));
     for iStim=1:length(All_stim_shuffle)
         
         Screen('FillRect',wPtr,[0 0 0]); %draw a rectangle (big as all the monitor) on the back buffer
@@ -273,8 +287,10 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
         toTime=inf; %second to stop in movie
         soundvolume=0; %0 to 1
         
-        
-        
+        %disp on command window
+        if ismember(iStim,stim2disp)
+            disp (strcat('Presenting stimulus',num2str(iStim)));
+        end
         
         responseKey = [];
         
@@ -436,6 +452,9 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
             toTime=inf; %second to stop in movie
             soundvolume=0; %0 to 1
             
+            %disp in the command window
+            disp 'This is a TARGET!'
+            
             %stop the loop only when participant presses one of these keys
             
             responseKey = [];
@@ -528,11 +547,11 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
             
             trial_type='target';
             
-            %%add n/a in the repo col when there is no response
-            if Resp{iStim}
+            %%add n/a in the resp col when there is no response
+            if Resp_target{iStim}
                 %do nothing
             else
-                Resp{iStim}='n/a';
+                Resp_target{iStim}='n/a';
             end
         %    
 %             Duration_target(iStim)= Video_end_time-Start_time;
