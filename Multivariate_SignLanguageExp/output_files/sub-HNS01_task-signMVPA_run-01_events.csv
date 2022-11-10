@@ -1,0 +1,13 @@
+
+onset,duration,trial_type,stim_name, time_loop,Target,Same_Target,Response_key,group
+1.007519e+01,2.113775e+00,sign,Stim1M,5.039093e+00,0,0,f,HNS
+1.518229e+01,2.125048e+00,sign,Stim3VCF,5.038923e+00,0,0,n/a,HNS
+2.029670e+01,2.141956e+00,no_sign,NoStim1M,5.030645e+00,0,0,n/a,HNS
+2.539188e+01,2.146969e+00,sign,Stim2SCM,5.025717e+00,0,0,n/a,HNS
+3.047692e+01,2.161763e+00,no_sign,NoStim2M,5.035344e+00,0,0,n/a,HNS
+3.557866e+01,2.119554e+00,no_sign,NoStim4M,5.018610e+00,0,0,n/a,HNS
+4.066284e+01,2.160302e+00,no_sign,NoStim8M,5.031536e+00,0,0,n/a,HNS
+4.585696e+01,2.133378e+00,sign,Stim3M,5.013418e+00,0,0,n/a,HNS
+5.105390e+01,2.140485e+00,no_sign,NoStim7F,5.032330e+00,0,0,LeftControl,HNS
+5.616962e+01,2.178361e+00,sign,Stim2VCF,5.008312e+00,0,0,n/a,HNS
+6.124144e+01,2.157289e+00,no_sign,NoStim8F,5.014867e+00,0,0,DELETE,HNS

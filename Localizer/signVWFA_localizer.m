@@ -64,7 +64,7 @@ global GlobalExpID GlobalGroupID GlobalSubjectID GlobalRunNumberID GlobalStimuli
 
 GlobalExpID= 'loc';
 GlobalGroupID= input ('Group (HNS-HES-HLS-DES):','s'); %%HNS: Hearing non signers; HES:Hearing early signers; HLS:Hearing late signers; DES:Deaf early signers
-GlobalSubjectID=input('Subject ID: e.g. 01', 's'); 
+GlobalSubjectID=input('Subject ID (e.g. 01):', 's'); 
 GlobalRunNumberID=input('Run Number(01-02): ', 's');
 GlobalStimuliID= '3D'; %input('Stimuli style (line - 3D):','s'); % specify if you use line drawing or 3D volumetric stimuli
 

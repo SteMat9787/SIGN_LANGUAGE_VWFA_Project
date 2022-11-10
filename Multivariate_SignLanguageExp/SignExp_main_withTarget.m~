@@ -83,7 +83,7 @@ global  GlobalExpID GlobalGroupID GlobalSubjectID GlobalRunNumberID
 % GlobalExpID=input('Experiment ID (SignExp): ', 's');
 GlobalExpID= 'signMVPA';
 GlobalGroupID= input ('Group (HNS-HES-HLS-DES):','s'); %%HNS: Hearing non signers; HES:Hearing early signers; HLS:Hearing late signers; DES:Deaf early signers
-GlobalSubjectID=input('Subject ID(e.g. 01):', 's'); %% 
+GlobalSubjectID=input('Subject ID: e.g. 01', 's'); %% 
 GlobalRunNumberID=input('Run Number(01-12): ', 's');
 
 %% TRIGGER
