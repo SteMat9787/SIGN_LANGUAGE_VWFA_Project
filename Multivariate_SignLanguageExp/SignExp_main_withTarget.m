@@ -165,14 +165,15 @@ All_stim_shuffle=Shuffle(All_stim_FM);
 
 %For the original size open this part
 % %Set the size to 1 to present the video in their original size
-%size=1;
+size=1;
 
 %For the modified size open this part
 %Set the size to 2 to present the video in a different size and select the
 % %size (in pixels) (to keep the ratio: 400-225/450-253/500-281
-size=2;
-Width_modified= 700; %width video 1 in pixels
-Height_modified=394; %height video 1 in pixels
+
+% size=2;
+% Width_modified= 700; %width video 1 in pixels
+% Height_modified=394; %height video 1 in pixels
 
 
 %Set the times
@@ -564,9 +565,16 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
     WaitSecs(Baseline_end);
     LoopEnd=GetSecs();
     disp (strcat( 'The time for the run took min:', num2str ((LoopEnd-LoopStart)/60)));
+    
+    %%%%%This part it is added to if the script end before the data
+    %%%%%acquisitions the subject  will se the fix cross and not the matlab
+    %%%%%screen.
     %wait for any key pressed to close the screen
-    disp 'Press any key to quit';
-    KbWait(-1);
+    disp 'Press SPACE to quit';
+    
+    ActiveKey= [KbName('space')];%select the key you want to stay active for kbwait
+    RestrictKeysForKbCheck(ActiveKey); % make it active
+    KbWait(-1); %will only work with  space
     
     %create a .tsv file with tab delimiter (better for BIDS analyses)
     table= readtable(output_file_name);
@@ -576,16 +584,6 @@ try %the 'try and chatch me' part is added to close the screen in case of an err
    
     cd('output_files')
     save(strcat (GlobalSubjectID,'_Onsetfile_',GlobalRunNumberID,'.mat'),'Onset','Name','Duration','Resp','Onset_target','Name_target','Duration_target','Resp_target');
-    
-    %%%%%This part it is added to if the script end before the data
-    %%%%%acquisitions the subject  will se the fix cross and not the matlab
-    %%%%%screen.
-    
-%     %Draw THE FIX CROSS
-%     Screen('DrawLines',wPtr,crossLines,crossWidth,crossColorEnd,[screenCenterX,screenCenterY]);
-%     %Screen('TextSize', wPtr, 14);%text size
-%     %DrawFormattedText(wPtr, '\n [press any key to quit]', [],[],[255 255 255]); 
-%     Screen('Flip', wPtr); 
 
     
 catch ME %the 'try and chatch me' part is added to close the screen in case of an error so that you can see the command window and not get stucked with the blank screen)
