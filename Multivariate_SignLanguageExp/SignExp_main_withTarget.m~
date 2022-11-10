@@ -98,7 +98,7 @@ if ~exist(output_directory, 'dir')
 end
 
 output_file_name= strcat(output_directory,'/sub-', GlobalGroupID,GlobalSubjectID, '_task-', GlobalExpID,'_run-',GlobalRunNumberID,'_events','.csv');
-output_file_name_tab= strcat(output_directory,'/sub-', GlobalGroupID,GlobalSubjectID, '_task-', GlobalExpID,'_run-',GlobalRunNumberID,'events','.tsv');
+output_file_name_tab= strcat(output_directory,'/sub-', GlobalGroupID,GlobalSubjectID, '_task-', GlobalExpID,'_run-',GlobalRunNumberID, '.tsv');
 
 logfile=fopen(output_file_name,'a');%'a'== PERMISSION: open or create file for writing; append data to end of file
 fprintf(logfile,'\n');
