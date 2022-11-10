@@ -64,8 +64,8 @@ global GlobalExpID GlobalGroupID GlobalSubjectID GlobalRunNumberID GlobalStimuli
 
 GlobalExpID= 'loc';
 GlobalGroupID= input ('Group (HNS-HES-HLS-DES):','s'); %%HNS: Hearing non signers; HES:Hearing early signers; HLS:Hearing late signers; DES:Deaf early signers
-GlobalSubjectID=input('Subject ID: ', 's'); %% (first 2 letters of Name-first 2 letters of Surname)
-GlobalRunNumberID=input('Run Number(1-4): ', 's');
+GlobalSubjectID=input('Subject ID: e.g. 01', 's'); 
+GlobalRunNumberID=input('Run Number(01-02): ', 's');
 GlobalStimuliID= '3D'; %input('Stimuli style (line - 3D):','s'); % specify if you use line drawing or 3D volumetric stimuli
 
 % if strcmp(GlobalStimuliID,'line')
@@ -89,8 +89,8 @@ output_directory='output_files';
 if ~exist(output_directory, 'dir')
     mkdir(output_directory)
 end
-output_file_name= strcat(output_directory,'/sub-', GlobalSubjectID, '_ses-',GlobalRunNumberID, '_task-', GlobalExpID, '.csv');
-output_file_name_tab= strcat(output_directory,'/sub-', GlobalSubjectID, '_ses-',GlobalRunNumberID, '_task-', GlobalExpID, '.tsv'); %will be usedd for tsv converted output file
+output_file_name= strcat(output_directory,'/sub-', GlobalGroupID, GlobalSubjectID, '_task-', GlobalExpID,'_run-',GlobalRunNumberID,'_events',  '.csv');
+output_file_name_tab= strcat(output_directory,'/sub-',GlobalGroupID, GlobalSubjectID,'_task-', GlobalExpID,  '_run-',GlobalRunNumberID,'_events', '.tsv'); %will be usedd for tsv converted output file
 
 logfile=fopen(output_file_name,'a');%'a'== PERMISSION: open or create file for writing; append data to end of file
 fprintf(logfile,'\n');
@@ -374,9 +374,15 @@ try  % safety loop: close the screen if code crashes
     LoopEnd=GetSecs();
     
     disp (strcat( 'The time for the run took min:', num2str ((LoopEnd-LoopStart)/60)));
+    %%%%%This part it is added to if the script end before the data
+    %%%%%acquisitions the subject  will se the fix cross and not the matlab
+    %%%%%screen.
     %wait for any key pressed to close the screen
-    disp 'Press any key to quit';
-    KbWait(-1);
+    disp 'Press SPACE to quit';
+    
+    ActiveKey= [KbName('space')];%select the key you want to stay active for kbwait
+    RestrictKeysForKbCheck(ActiveKey); % make it active
+    KbWait(-1); %will only work with  space
     
     %create a .tsv file with tab delimiter (better for BIDS analyses)
     table= readtable(output_file_name);
