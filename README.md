@@ -7,4 +7,4 @@ It includes 3 different parts of the project :
 - fMRI--> multivariate sign-language experiment inclluding meaningless and meaningful signs
 - Behav --> behavioral rating
 
-+ the short training to run before fMRI 
++ +the short training to run before fMRI 
