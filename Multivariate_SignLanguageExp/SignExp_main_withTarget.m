@@ -3,7 +3,7 @@ tic
 %first version for a pilot in August 2020 and adapted for a new pilot in
 %July 2022).
 
-% It presents the ensamble of videos of signs in an event-related fashion
+% It presents the ensamble of videos of signs in an event-related fashion 
 
 % The scripts works with one external function (tsvwrite) that convert the csv output to a tsv file (for BIDS analyses)
 
@@ -113,6 +113,7 @@ fprintf(logfile,'onset,duration,trial_type,stim_name, time_loop,Target,Same_Targ
 %stim path
 stim_path=fullfile(cd,'Sign_Stimuli/');
 
+rng('shuffle');
 %stim names
 stim={'Stim1','Stim2','Stim3'};
 stimVC={'Stim1VC','Stim2VC','Stim3VC'};
