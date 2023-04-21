@@ -52,6 +52,7 @@ tic
 clear all;
 clc;
 Screen('Preference', 'SkipSyncTests', 1);
+rng('shuffle');
 
 %% Device
 Cfg.device = 'PC'; %(Change manually: 'PC' or 'Scanner')
