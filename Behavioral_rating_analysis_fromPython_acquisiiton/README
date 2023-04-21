@@ -1,0 +1,32 @@
+# SIGN-LANGUAGE-EXP_ANALYZE_behavioral_rating_acquired in Python
+
+In this folder there is all the material to analyse the visual and sematic similarity acquired in Python
+
+PRE-REQUISITE TO RUN THESE ANALYSES:
+First:you need to convert (manually) the .csv results into .xltx extension, so you will be able to load the data as table in matlab
+
+FIRST STEP OF THE ANALYSES:
+Run the script 'Create_ratings_DSM', this will load the .xltx file, extract the needed variable (i.e. name of pairs'stimuli, visual rating and semantic rating).
+BE CAREFUL: there is some "manual" staff to check because unfortunately each subject has slightly different number of rows and columns.
+Check the script before to run it and change the values manually for each subject!!
+Input for this script: .xltx file;
+Output of this script: a .mat file named '<sub_ID>_task-rating_beh.mat' into a folder named 'reordered_ratings'.
+
+SECOND STEP:
+Inside the 'reordered_ratings' folder run the script 'Analayze_ratings_plotDSM_Female_Male_averaged';
+This script will reorder the pairs based on the neura data order (we need the same order to run further analyses between brain and behaviora data) and average the ratings for male and female actors.
+
+Input for this script: 
+- '<sub_ID>_task-rating_beh.mat' file;
+- function named: 'Analyze_ratings_plotDSMs_FemaleActor.m';
+- function named: 'Analyze_ratings_plotDSMs_MaleActor.m';
+
+Output of this script:
+- a .mat file named '<sub_ID>_task-rating_beh_actorMERGED.mat' including the DSM ww'll use for the analyses.
+- a figure with 6 subplot: left col are results for visual rating, right col are results for semantic rating. 
+  Top row are results for female actress only, middle row are results for male actor only, bottom row are results for averaged actor
+
+THIRD STEP (OPTIONAL)
+To visualize the full DSM including rating for both actors separated run the script 'Analyze_ratings_plotDSMs_actorSeparated_visualizeOnly';
+This script will not save any output, only visualize a figure including 2 DSMs one for visual rating and one for semantic rating.
+ 
