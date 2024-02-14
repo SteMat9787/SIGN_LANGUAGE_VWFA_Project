@@ -34,7 +34,7 @@ tic
 % MINIMUM DURATION = 249s (4.15 min) / MAXIMUM DURATION = 281s (4.68 min)
 
 %TWO VARIANT OF THE LOCALIZER (to chose in the Global variable setting)
-%1. Line drawing stimuli
+%1. Line drawing stimuli (***NOW EXCLUDED***)
 %2. 3D Volumetric stimuli
 %IMPORTANT: After a first pilot we fixed the Global variable setting to 3D Volumetric
 %stimuli
