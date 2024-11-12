@@ -8,6 +8,6 @@ In this folder there are:
 
 The output is a folder named:'[subname]_3D_Onsetfiles' including:
 1. a .csv file with the results for each run (here you find also runs that crashed or that stop before the end)
-2. a .tsv file for BIDS analyses for each run
-3. a .mat file for each run (this is the output for the fMRI analysis)
+2. a .tsv file for BIDS analyses for each run (this is the output for the fMRI analysis)
+3. a .mat file for each run 
 
